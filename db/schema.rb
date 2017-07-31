@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731001334) do
+ActiveRecord::Schema.define(version: 20170731014743) do
 
   create_table "games", force: :cascade do |t|
     t.integer "decks"
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(version: 20170731001334) do
     t.integer "insurance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_game_id"
+    t.index ["user_game_id"], name: "index_hands_on_user_game_id"
   end
 
   create_table "rounds", force: :cascade do |t|
@@ -35,11 +37,17 @@ ActiveRecord::Schema.define(version: 20170731001334) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "game_id"
+    t.index ["game_id"], name: "index_rounds_on_game_id"
   end
 
   create_table "user_games", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "game_id"
+    t.index ["game_id"], name: "index_user_games_on_game_id"
+    t.index ["user_id"], name: "index_user_games_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
