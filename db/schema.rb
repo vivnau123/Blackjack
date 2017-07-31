@@ -10,18 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731014743) do
+ActiveRecord::Schema.define(version: 20170731193721) do
 
   create_table "games", force: :cascade do |t|
     t.integer "decks"
-    t.integer "players"
-    t.integer "cards"
+    t.text "players"
+    t.text "cards"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status"
   end
 
   create_table "hands", force: :cascade do |t|
-    t.integer "cards"
+    t.text "cards"
     t.integer "coins"
     t.integer "payoff"
     t.string "status"
@@ -33,7 +34,7 @@ ActiveRecord::Schema.define(version: 20170731014743) do
   end
 
   create_table "rounds", force: :cascade do |t|
-    t.integer "dealer_cards"
+    t.text "dealer_cards"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
