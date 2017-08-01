@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731193721) do
+ActiveRecord::Schema.define(version: 20170731222327) do
 
   create_table "games", force: :cascade do |t|
     t.integer "decks"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20170731193721) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status"
+    t.integer "current_round"
   end
 
   create_table "hands", force: :cascade do |t|
@@ -30,6 +31,8 @@ ActiveRecord::Schema.define(version: 20170731193721) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_game_id"
+    t.integer "round_id"
+    t.index ["round_id"], name: "index_hands_on_round_id"
     t.index ["user_game_id"], name: "index_hands_on_user_game_id"
   end
 
@@ -39,6 +42,7 @@ ActiveRecord::Schema.define(version: 20170731193721) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "game_id"
+    t.integer "current_player"
     t.index ["game_id"], name: "index_rounds_on_game_id"
   end
 

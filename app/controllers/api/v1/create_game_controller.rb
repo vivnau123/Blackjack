@@ -25,8 +25,9 @@ module Api
             end
           end
           if i == new_game_params[:players].length
-            game.status = 'ACTIVE'
-            render json: {message: 'Game created', data:game}, status: :ok
+            game.status = 'INITIALIZED'
+            game.save
+            render json: {message: 'Game created', data:game.attributes.except("cards")}, status: :ok
           end
         else
           render json: {status: 'ERROR', message: 'Game not created', error: game.errors}, status: :unprocessable_entry

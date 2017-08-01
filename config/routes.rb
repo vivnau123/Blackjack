@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     namespace 'v1' do
       resources :users
       resources :create_game
+      resources :deal
     end
   end
 end
