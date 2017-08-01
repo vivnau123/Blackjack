@@ -4,7 +4,7 @@ module Api
       def create
         if Game.exists?(id: deal_params[:id])
           game = Game.find(deal_params[:id])
-          if game.status == 'ROUND_UNDERWAY'
+          if game.status == 'INITIALIZED'
             cards = game.cards
             number_of_cards = cards.length
             players = game.players
@@ -30,6 +30,7 @@ module Api
 
             hands = Array.new
             k = 0
+            x = 0
             players.each do |player_id|
               userGame = UserGame.find_by user_id: player_id, game_id: game.id
 
@@ -42,8 +43,7 @@ module Api
               card_j = cards[j]
               cards.delete(card_j)
 
-              hand_status = status
-
+              hand_status = (status == 'INSURANCE') ? status : ((x==0)? 'ACTIVE' : 'WAITING')
               user_cards = Array.new([card_i, card_j])
 
               payoff = 0
@@ -53,11 +53,13 @@ module Api
               if handValue(user_cards) == 21
                 hand_status = 'BLACKJACK'
                 payoff = coins[k]*1.5
+              else
+                x = 1
               end
 
               hand = Hand.new(coins: (coins[k] + payoff), payoff: payoff, insurance: 0, user_game_id: userGame.id, status: hand_status, cards: user_cards, round_id: round.id)
               hand.save
-              hands<<{status: hand_status,coins: (coins[k] + payoff), payoff: payoff, cards_value: handValue(user_cards), id: hand.id, user_id: player_id, cards: user_cards.map{|card| cardDetails(card)}}
+              hands<<{player: User.find(player_id).name,user_id: player_id,status: hand_status,coins: (coins[k] + payoff), payoff: payoff, cards_value: handValue(user_cards), id: hand.id, user_id: player_id, cards: user_cards.map{|card| cardDetails(card)}}
               k = k + 1
             end
 

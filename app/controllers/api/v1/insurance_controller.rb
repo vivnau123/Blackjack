@@ -8,15 +8,19 @@ module Api
           if round.status == 'INSURANCE'
             insuranceList = insurance_params[:insurance]
             i = 0
+            hands = []
             insuranceList.each do |insuranceObj|
               handId = insuranceObj[:hand_id]
               insurance = insuranceObj[:insurance]
               if Hand.exists?(id: handId)
                 hand = Hand.find(handId)
                 if hand.status == 'INSURANCE' && hand.round_id == round.id && hand.coins >= 2*insurance
+                  userGame = UserGame.find(hand.user_game_id)
                   hand.insurance = insurance
+                  hand.status = (userGame.user_id == round.current_player)? 'ACTIVE' : 'WAITING'
                   if hand.save
                     i = i+1
+                    hands<<{player: User.find(userGame.user_id).name, user_id: userGame.user_id,status: hand.status,coins: hand.coins, payoff: hand.payoff, insurance:hand.insurance, cards_value: handValue(hand.cards), id: hand.id, cards: hand.cards.map{|card| cardDetails(card)}}
                   else
                     break
                   end
@@ -28,7 +32,10 @@ module Api
               end
             end
             if i == insuranceList.length
-              render json: {status: 'SUCCESS', message: "Insurance placed, move to playing hands. It's "+ currentPlayer +"'s turn"}
+              round.status = 'ACTIVE'
+              round.save
+              round.dealer_cards = round.dealer_cards.map{ |card| cardDetails(card)}
+              render json: {hands: hands,round:round.attributes.except("created_at","updated_at"),message: "Insurance placed, move to playing hands. It's "+ currentPlayer +"'s turn"}
             else
               render json: {status: 'ERROR', message: 'Invalid inputs'}
             end
