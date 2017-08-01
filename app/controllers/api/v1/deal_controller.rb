@@ -4,7 +4,7 @@ module Api
       def create
         if Game.exists?(id: deal_params[:id])
           game = Game.find(deal_params[:id])
-          if game.status == 'INITIALIZED'
+          if game.status == 'ROUND_UNDERWAY'
             cards = game.cards
             number_of_cards = cards.length
             players = game.players
@@ -42,7 +42,7 @@ module Api
               card_j = cards[j]
               cards.delete(card_j)
 
-              hand_status = 'ACTIVE'
+              hand_status = status
 
               user_cards = Array.new([card_i, card_j])
 
@@ -62,7 +62,7 @@ module Api
             end
 
             game.cards = cards
-            game.status = status
+            game.status = 'ROUND_UNDERWAY'
             game.current_round = round.id
             game.save
             round.dealer_cards.delete(round.dealer_cards[1])

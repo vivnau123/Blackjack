@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       resources :users
       resources :create_game
       resources :deal
+      resources :insurance
     end
   end
 end
