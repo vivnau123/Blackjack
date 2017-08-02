@@ -32,11 +32,13 @@ module Api
             hand.save
 
             if(value >= 21)
-              @hands = Hand.where("round_id = ? AND status = ?", hand.round_id, 'WAITING').order('created_at DESC')
+              @hands = Hand.where("round_id = ? AND status = ?", hand.round_id, 'WAITING').order('created_at ASC')
               if @hands.length > 0
                 nextHand = @hands[0]
                 nextHand.status = 'ACTIVE'
                 nextHand.save
+              else
+                revealDealerCards(hand.round_id)
               end
             end
 

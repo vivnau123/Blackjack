@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :finish_game
       resources :winner
       resources :hit
+      resources :stand
     end
   end
 end
