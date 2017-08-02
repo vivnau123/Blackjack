@@ -4,6 +4,8 @@ module Api
       def create
         if Round.exists?(id: insurance_params[:round_id])
           round = Round.find(insurance_params[:round_id])
+          game = Game.find(round.game_id)
+          dealerCardsValue = handValue(round.dealer_cards)
           currentPlayer = User.find(round.current_player).name
           if round.status == 'INSURANCE'
             insuranceList = insurance_params[:insurance]
@@ -16,8 +18,18 @@ module Api
                 hand = Hand.find(handId)
                 if hand.status == 'INSURANCE' && hand.round_id == round.id && hand.coins >= 2*insurance
                   userGame = UserGame.find(hand.user_game_id)
+                  user = User.find(userGame.user_id)
                   hand.insurance = insurance
                   hand.status = (userGame.user_id == round.current_player)? 'ACTIVE' : 'WAITING'
+
+                  if dealerCardsValue == 21
+                    hand.status = 'BUST'
+                    hand.payoff = 2*insurance
+                    userCoins = user.coins
+                    userCoins = userCoins - hand.coins + 2*insurance
+                    user.save
+                  end
+
                   if hand.save
                     i = i+1
                     hands<<{player: User.find(userGame.user_id).name, user_id: userGame.user_id,status: hand.status,coins: hand.coins, payoff: hand.payoff, insurance:hand.insurance, cards_value: handValue(hand.cards), id: hand.id, cards: hand.cards.map{|card| cardDetails(card)}}
@@ -33,6 +45,11 @@ module Api
             end
             if i == insuranceList.length
               round.status = 'ACTIVE'
+              if dealerCardsValue == 21
+                round.status = 'FINISHED'
+                game.status = 'INITIALIZED'
+                game.save
+              end
               round.save
               round.dealer_cards = round.dealer_cards.map{ |card| cardDetails(card)}
               render json: {hands: hands,round:round.attributes.except("created_at","updated_at"),message: "Insurance placed, move to playing hands. It's "+ currentPlayer +"'s turn"}
