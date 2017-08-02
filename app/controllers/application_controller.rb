@@ -22,13 +22,15 @@ class ApplicationController < ActionController::Base
       end
       total += userCard
     end
-    possibilities = Array.new([total - 21])
-    
+    possibilities = Array.new([total])
+
     aces.times do |i|
-      possibilities.push(total + (i+1)*10 - 21)
+      possibilities.push(total + (i+1)*10)
     end
 
-    total = possibilities.select{|n| n <= 0}.max + 21
+    maximum = possibilities.select{|n| n <= 21}.max
+
+    total =  (maximum) ? maximum : total
     return total
   end
 end
