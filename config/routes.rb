@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :insurance
       resources :game_status
       resources :finish_game
+      resources :winner
     end
   end
 end

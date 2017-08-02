@@ -51,7 +51,7 @@ module Api
               coins = deal_params[:coins]
 
               if handValue(user_cards) == 21
-                hand_status = 'BLACKJACK'
+                hand_status = 'WINNER'
                 payoff = coins[k]*1.5
               else
                 x = 1
