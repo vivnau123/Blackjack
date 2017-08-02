@@ -16,6 +16,7 @@ module Api
                 :coins => hand.coins,
                 :payoff => hand.payoff,
                 :insurance => hand.insurance,
+                :status => hand.status,
                 :player => {
                   :name => User.find(UserGame.find(hand.user_game_id).user_id).name,
                   :user_id => User.find(UserGame.find(hand.user_game_id).user_id).id
@@ -38,6 +39,7 @@ module Api
           render json: {
             game_id: game.id,
             decks: game.decks,
+            game_status: game.status,
             players: game.players.map{|id| {
               :name => User.find(id).name,
               :user_id => id
