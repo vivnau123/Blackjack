@@ -1,7 +1,7 @@
 # HOW TO RUN?
 
 * `git clone https://gitlab.com/vivnau/blackjack.git`
-* `cd ror_vivek/blackjack`
+* `cd blackjack`
 * `bundle install` to install all the package dependencies
 * `rails db:migrate` to create database tables
 * `rails s` to start the server
