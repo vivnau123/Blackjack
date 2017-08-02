@@ -19,7 +19,7 @@
 * create_game : POST API /api/v1/create_game
   parameters required : {
     "players" : [array of ids of users playing the game],
-    "decks" : total number of decks to be added to the card store, between 4 to 8 decks can be used
+    "decks" : total number of decks to be added to the card store
   }
 
   will return the id of the new game create
