@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :winner
       resources :hit
       resources :stand
+      resources :double_down
     end
   end
 end
