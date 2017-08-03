@@ -49,6 +49,14 @@
 
   will stand and move to another hand only if the hand_status is set to ACTIVE, which goes in order to the next player, once all hands are dealt the final results are processed and stored in the db
 
+* double_down : GET API /api/v1/double_down/:hand_id
+
+  if card value is 11,10 or 9 user can double the bet on that hand using this endpoint
+
+* split : GET API /api/v1/split/:hand_id
+
+  if two cards with same denomination are dealt to the user, they can split the hand into two hands and the bet also gets divided between the two new hands, after the first hand is played, user can play the second hand.
+
 * game_status : GET API api/v1/status/:game_id
 
   provides a full snapshot of the game along with cards in different rounds for different hands played by various players, and the various bets associated with it, the payoffs and insurances
