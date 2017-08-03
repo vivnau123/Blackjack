@@ -26,7 +26,14 @@ module Api
             game.cards = gameCards
             game.save
 
-            @hands = Hand.where("round_id = ? AND status = ?", hand.round_id, 'WAITING').order('created_at ASC')
+            @hands = Hand.where("round_id = ? AND status = ?", hand.round_id, 'WAITING_NEXT').order('created_at ASC')
+            if @hands.length > 0
+              nextHand = @hands[0]
+              nextHand.status = 'ACTIVE'
+              nextHand.save
+            else
+              @hands = Hand.where("round_id = ? AND status = ?", hand.round_id, 'WAITING').order('created_at ASC')
+            end
             if @hands.length > 0
               nextHand = @hands[0]
               nextHand.status = 'ACTIVE'

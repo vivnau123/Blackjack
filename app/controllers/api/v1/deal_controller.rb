@@ -59,7 +59,7 @@ module Api
 
               hand = Hand.new(coins: (coins[k] + payoff), payoff: payoff, insurance: 0, user_game_id: userGame.id, status: hand_status, cards: user_cards, round_id: round.id)
               hand.save
-              hands<<{player: User.find(player_id).name,user_id: player_id,status: hand_status,coins: (coins[k] + payoff), payoff: payoff, cards_value: handValue(user_cards), id: hand.id, user_id: player_id, cards: user_cards.map{|card| cardDetails(card)}}
+              hands<<handOuput(hand)
               k = k + 1
             end
 

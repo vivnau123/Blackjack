@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :hit
       resources :stand
       resources :double_down
+      resources :split
     end
   end
 end

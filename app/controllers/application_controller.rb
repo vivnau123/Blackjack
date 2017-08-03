@@ -8,6 +8,34 @@ class ApplicationController < ActionController::Base
     return denomination.to_s + " of " + suit
   end
 
+  def roundOutput(round, hands_output)
+    return {
+      :id => round.id,
+      :dealer_cards => round.dealer_cards.map{ |card| cardDetails(card)},
+      :status => round.status,
+      :current_player => {
+        :name => User.find(round.current_player).name,
+        :user_id => round.current_player
+      },
+      :hands => hands_output
+    }
+  end
+
+  def handOuput(hand)
+    return {
+      :id => hand.id,
+      :cards => hand.cards.map{ |card| cardDetails(card)},
+      :coins => hand.coins,
+      :payoff => hand.payoff,
+      :insurance => hand.insurance,
+      :status => hand.status,
+      :player => {
+        :name => User.find(UserGame.find(hand.user_game_id).user_id).name,
+        :user_id => User.find(UserGame.find(hand.user_game_id).user_id).id
+      }
+    }
+  end
+
   def handValueDealer(userCards)
     total = 0
     aces = 0
